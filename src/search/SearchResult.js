@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import useSWR from 'swr'
 import React, { useState } from 'react'
-import Spinner from 'react-bootstrap/Spinner'
 import { css } from '@emotion/react'
 import Card from 'react-bootstrap/Card'
 import Badge from 'react-bootstrap/Badge'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import _ from 'lodash-es'
+import { ClimbingBoxLoader } from 'react-spinners'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
@@ -17,7 +17,9 @@ export default function SearchResult({ query }) {
   if (error) return <div>Error!</div>
 
   return !data ? (
-    <Spinner animation="grow" />
+    <Row className="my-5 justify-content-center">
+      <ClimbingBoxLoader loading={true} />
+    </Row>
   ) : (
     <SearchResultList resultData={data} />
   )
