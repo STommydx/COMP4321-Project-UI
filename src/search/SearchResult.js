@@ -14,7 +14,22 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 export default function SearchResult({ query }) {
   const { data, error } = useSWR('/api/search.jsp?' + query.toString(), fetcher)
 
-  if (error) return <div>Error!</div>
+  if (!query) return <></>
+
+  if (error)
+    return (
+      <Row>
+        <Col>
+          <Card css={resultCardStyle}>
+            <Card.Body>
+              <Card.Title>Error!</Card.Title>
+              <Card.Text>Opps! An error occurred when fetching.</Card.Text>
+              <Card.Text>{error.toString()}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    )
 
   return !data ? (
     <Row className="my-5 justify-content-center">
@@ -66,6 +81,21 @@ function ResultCard({ similarity, documentRecord }) {
 }
 
 function SearchResultList({ resultData }) {
+  if (resultData.length === 0) {
+    return (
+      <Row>
+        <Col>
+          <Card css={resultCardStyle}>
+            <Card.Body>
+              <Card.Title>No Result!</Card.Title>
+              <Card.Text>Opps! No result found.</Card.Text>
+              <Card.Text>Maybe you can search again?</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    )
+  }
   return resultData.map(({ documentRecord, ...props }) => (
     <Row key={documentRecord.url} className={['mb-2']}>
       <Col>
