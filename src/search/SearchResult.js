@@ -68,10 +68,12 @@ function ResultCard({ similarity, documentRecord }) {
         <Card.Subtitle>
           <a href={documentRecord.url}>{documentRecord.url}</a>
         </Card.Subtitle>
-        <KeywordList freqTable={documentRecord.freqTable} />
-        <Card.Text className="text-secondary">
+        <Card.Text className="text-secondary mb-0">
           {new Date(documentRecord.lastModificationDate).toDateString()},{' '}
           {documentRecord.pageSize}B
+        </Card.Text>
+        <Card.Text>
+          <KeywordList freqTable={documentRecord.freqTable} />
         </Card.Text>
         <Card.Text className="mb-0">Child Links:</Card.Text>
         <LinksList links={documentRecord.childLinks} />
