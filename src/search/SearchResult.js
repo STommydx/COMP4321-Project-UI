@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import useSWR from 'swr'
-import React from 'react'
+import React, { useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import { css } from '@emotion/react'
 import Card from 'react-bootstrap/Card'
@@ -45,14 +45,8 @@ function ResultCard({ similarity, documentRecord }) {
           Last Modification: {documentRecord.lastModificationDate} Size of Page:{' '}
           {documentRecord.pageSize}
         </Card.Text>
-        <Card.Text>Child Links:</Card.Text>
-        <ul>
-          {documentRecord.childLinks.map((parentLink) => (
-            <li key={parentLink}>
-              <a href={parentLink}>{parentLink}</a>
-            </li>
-          ))}
-        </ul>
+        <Card.Text className="mb-0">Child Links:</Card.Text>
+        <LinksList links={documentRecord.childLinks} />
       </Card.Body>
     </Card>
   )
@@ -66,4 +60,26 @@ function SearchResultList({ resultData }) {
       </Col>
     </Row>
   ))
+}
+
+function LinksList({ links }) {
+  const [limit, setLimit] = useState(5)
+  return (
+    <ul>
+      {links.slice(0, limit).map((parentLink) => (
+        <li key={parentLink}>
+          <a href={parentLink}>{parentLink}</a>
+        </li>
+      ))}
+      {limit < links.length && (
+        <li onClick={() => setLimit(limit + 5)}>
+          <div
+            className="font-italic text-secondary"
+            css={{ cursor: 'pointer' }}>
+            [Show more...]
+          </div>
+        </li>
+      )}
+    </ul>
+  )
 }
