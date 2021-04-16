@@ -6,7 +6,7 @@ import { BsSearch } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 function SearchBox({ queryString, setQueryString }) {
-  const [selection, setSelection] = useState([])
+  const [selection, setSelection] = useState([queryString])
   const [isLoading, setIsLoading] = useState(false)
   const [searchSuggestion, setSearchSuggestion] = useState([])
 

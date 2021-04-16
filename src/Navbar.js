@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   return (
-    <BootstrapNavbar expand="lg" bg="dark" variant="dark">
+    <BootstrapNavbar expand="md" bg="dark" variant="dark">
       <Link to="/">
         <BootstrapNavbar.Brand>CSE Search</BootstrapNavbar.Brand>
       </Link>
