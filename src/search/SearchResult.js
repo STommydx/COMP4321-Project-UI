@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card'
 import Badge from 'react-bootstrap/Badge'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import _ from 'lodash-es'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
@@ -35,12 +36,22 @@ function ResultCard({ similarity, documentRecord }) {
     <Card css={resultCardStyle}>
       <Card.Body>
         <Card.Title>
-          <Badge variant="primary">{similarity}</Badge>
+          <Badge
+            variant="primary"
+            css={css`
+              background-color: hsl(${Math.round(similarity * 120)}, 100%, 45%);
+            `}>
+            {similarity.toLocaleString(undefined, {
+              maximumFractionDigits: 6,
+              minimumFractionDigits: 6
+            })}
+          </Badge>
         </Card.Title>
         <Card.Title>{documentRecord.title}</Card.Title>
         <Card.Subtitle>
           <a href={documentRecord.url}>{documentRecord.url}</a>
         </Card.Subtitle>
+        <KeywordList freqTable={documentRecord.freqTable} />
         <Card.Text className="text-secondary">
           {new Date(documentRecord.lastModificationDate).toDateString()},{' '}
           {documentRecord.pageSize}B
@@ -81,5 +92,31 @@ function LinksList({ links }) {
         </li>
       )}
     </ul>
+  )
+}
+
+function KeywordList({ freqTable }) {
+  const [limit, setLimit] = useState(10)
+  const sortedTable = _.sortBy(
+    _.map(freqTable, (val, key) => ({ key: key, value: val })),
+    (x) => -x.value
+  )
+  return (
+    <>
+      {_.map(sortedTable, (item) => (
+        <Badge key={item.key} variant="dark" className="mr-1">
+          {item.key} <Badge variant="secondary">{item.value}</Badge>
+        </Badge>
+      )).slice(0, limit)}
+      {limit < sortedTable.length && (
+        <Badge
+          variant="dark"
+          onClick={() => setLimit(limit + 10)}
+          css={{ cursor: 'pointer' }}>
+          Show More...{' '}
+          <Badge variant="secondary">{sortedTable.length - limit}+</Badge>
+        </Badge>
+      )}
+    </>
   )
 }
