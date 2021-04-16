@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card'
 import Badge from 'react-bootstrap/Badge'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import SearchBar from './SearchBar'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
@@ -17,15 +18,18 @@ function useQuery() {
 }
 
 function Search() {
+  const query = useQuery()
   return (
     <Container>
-      <SearchResult />
+      <Row className={['my-2']}>
+        <SearchBar defaultQuery={query.get('q')} />
+      </Row>
+      <SearchResult query={query.toString()} />
     </Container>
   )
 }
 
-function SearchResult() {
-  const query = useQuery()
+function SearchResult({ query }) {
   const { data, error } = useSWR('/api/search.jsp?' + query.toString(), fetcher)
 
   if (error) return <div>Error!</div>
