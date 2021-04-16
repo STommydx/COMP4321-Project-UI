@@ -41,9 +41,9 @@ function ResultCard({ similarity, documentRecord }) {
         <Card.Subtitle>
           <a href={documentRecord.url}>{documentRecord.url}</a>
         </Card.Subtitle>
-        <Card.Text>
-          Last Modification: {documentRecord.lastModificationDate} Size of Page:{' '}
-          {documentRecord.pageSize}
+        <Card.Text className="text-secondary">
+          {new Date(documentRecord.lastModificationDate).toDateString()},{' '}
+          {documentRecord.pageSize}B
         </Card.Text>
         <Card.Text className="mb-0">Child Links:</Card.Text>
         <LinksList links={documentRecord.childLinks} />
