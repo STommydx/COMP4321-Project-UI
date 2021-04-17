@@ -12,6 +12,7 @@ function SearchBox({ queryString, setQueryString }) {
 
   const onSearch = async (query) => {
     setIsLoading(true)
+    setQueryString(query)
     try {
       const response = await fetch(`/api/suggest.jsp?q=${query}`).then((x) =>
         x.json()
@@ -29,10 +30,15 @@ function SearchBox({ queryString, setQueryString }) {
       id="search-box"
       isLoading={isLoading}
       options={[queryString].concat(searchSuggestion)}
-      onSearch={onSearch}
-      onChange={(selection) => setSelection(selection)}
-      onInputChange={(queryString) => setQueryString(queryString)}
+      onSearch={() => console.log('overridden by onInputChange')}
+      onChange={(selection) => {
+        setSelection(selection)
+        if (selection.length > 0) setQueryString(selection[0])
+      }}
+      onInputChange={onSearch}
       selected={selection}
+      useCache={false}
+      minLength={0}
     />
   )
 }
