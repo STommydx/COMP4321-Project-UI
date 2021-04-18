@@ -1,70 +1,139 @@
-# Getting Started with Create React App
+# COMP 4321 Project UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The project is the course project for the HKUST COMP 4321 course. It is a web search engine based on vector space model and powered by RocksDB.
 
-## Available Scripts
+This repository contains the optional UI component of the project. It gives a nice interactive user interface for the users to interact with the search engine.
 
-In the project directory, you can run:
+## Installation Guide
 
-### `yarn start`
+### Prerequisite
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Node.js
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The project is created with `create-react-web`. To setup the dependencies for building the app, the yarn package manager needs to be set up. Please refer to the [yarn website](https://classic.yarnpkg.com/en/docs/install) for setup instructions.
 
-### `yarn test`
+#### Static Web Server
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To serve the UI website, you will need a static web server to serve the files. Moreover, it should be able to proxy requests to support API calls to the backend JSP web server. We recommend using nginx for this purpose.
 
-### `yarn build`
+### Building
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Dependency Management
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Our project uses yarn package manager for dependency management. You should first install all dependencies by the following command.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+yarn install
+```
 
-### `yarn eject`
+#### Building the UI
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To build the static web pages, you may use the `build` script in `react-create-app`. The resulting pages will be stored in the `./build` folder.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+yarn build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Deploying the UI
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### Setting up the Static Web Server
 
-## Learn More
+You may setup any of the static web server of your preference. Copy all the build files to the web server directory for serving. The below command assumes the files in `/usr/share/nginx/html` are served as the root.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+cp -r ./build/. /usr/share/nginx/html
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+You may load the home page to verify your setup.
 
-### Code Splitting
+#### Linking the Backend API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+For the actual search functionality, you need to setup proxy to point all `/api` requests to the backend JSP server. For example, if you are using nginx, you may want to setup like the config below (assume backend is deployed at port `3001`).
 
-### Analyzing the Bundle Size
+```
+server {
+    location /api {
+        proxy_pass	http://localhost:3001;
+    }
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Please refer to the main project README.md document for setting up the JSP server.
 
-### Making a Progressive Web App
+### Developing the UI
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### Live Preview
 
-### Advanced Configuration
+To start a development server, you may use the `start` script. It will monitor any source code change and reflect in the web instantly.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+yarn start
+```
 
-### Deployment
+#### API Proxy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+To link the backend JSP server, you can configure the proxy in `package.json`.
 
-### `yarn build` fails to minify
+```json
+{
+  "proxy": "http://localhost:3001"
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For more details, please refer to the [documentation](https://create-react-app.dev/docs/proxying-api-requests-in-development) in `create-react-app`.
+
+## Contribution Guidelines
+
+### Cloning the project
+
+The project work best with the Intellij IDEA Ultimate. To import the project in IDEA:
+
+1. Choose `Get from Version Control`
+2. Choose GitHub
+3. Login GitHub
+4. Select this repository `COMP4321-Project-UI`
+5. Click clone!
+6. Open the project
+7. Wait for a little bit. IDEA should import the project automatically. ;)
+
+Of course, you can clone the project via the command line if you prefer.
+
+### Submitting Code Changes
+
+The project would not be successful without your contribution!
+
+#### Creating New Branch
+
+Follow the steps to create a new feature:
+
+1. VCS -> Git -> Branches
+2. New Branch
+3. Name your branch as `feature/yourfeaturename`
+4. Make awesome changes to the code!
+5. Commit your changes using VCS -> Commit, remember to stage your changes and make a nice commit message
+
+#### Cleaning Up
+
+Before submitting, you should clean up your work:
+
+1. Switch to `master` branch, do a pull to update to the latest changes
+2. Switch back to `feature/yourfeaturename`, run a rebase with master
+3. Resolve conflicts if needed, seek help if you don't know how to do so
+
+#### Creating Pull Request
+
+Lastly push the branch to GitHub and create a PR:
+
+1. VCS -> Git -> Push Branch `feature/yourfeaturename`
+2. Go to GitHub and create a pull request
+3. Set the source as `feature/yourfeaturename` and merge into `master`
+4. Wait for the approval!
+
+Refer to the following 2 links for more details on the PR workflow:
+
+1. [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
+2. [Pull Requests | Atlassian Git Tutorial](https://www.atlassian.com/git/tutorials/making-a-pull-request)
+
+### Who do I talk to?
+
+Please contact the repo owner Tommy LI in case you have any questions. Feel free to have a chat on other misc stuffs too!
