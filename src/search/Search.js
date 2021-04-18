@@ -1,64 +1,27 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import useSWR from 'swr'
-import Spinner from 'react-bootstrap/Spinner'
 import Container from 'react-bootstrap/Container'
-import Card from 'react-bootstrap/Card'
-import Badge from 'react-bootstrap/Badge'
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import SearchBar from './SearchBar'
+import SearchResult from './SearchResult'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search)
 }
 
 function Search() {
+  const query = useQuery()
   return (
     <Container>
-      <SearchResult />
+      <Row className="my-3">
+        <Col>
+          <SearchBar defaultQuery={query.get('q') || ''} />
+        </Col>
+      </Row>
+      <SearchResult query={query.toString()} />
     </Container>
   )
-}
-
-function SearchResult() {
-  const query = useQuery()
-  const { data, error } = useSWR('/api/search.jsp?' + query.toString(), fetcher)
-
-  if (error) return <div>Error!</div>
-
-  return !data ? (
-    <Spinner animation="grow" />
-  ) : (
-    <SearchResultList resultData={data} />
-  )
-}
-
-function SearchResultList({ resultData }) {
-  return resultData.map(({ similarity, documentRecord }) => (
-    <Card key={documentRecord.url} className={'mb-2'}>
-      <Card.Body>
-        <Card.Title>
-          <Badge variant="primary">{similarity}</Badge>
-        </Card.Title>
-        <Card.Title>{documentRecord.title}</Card.Title>
-        <Card.Subtitle>
-          <a href={documentRecord.url}>{documentRecord.url}</a>
-        </Card.Subtitle>
-        <Card.Text>
-          Last Modification: {documentRecord.lastModificationDate} Size of Page:{' '}
-          {documentRecord.pageSize}
-        </Card.Text>
-        <Card.Text>Child Links:</Card.Text>
-        <ul>
-          {documentRecord.childLinks.map((parentLink) => (
-            <li key={parentLink}>
-              <a href={parentLink}>{parentLink}</a>
-            </li>
-          ))}
-        </ul>
-      </Card.Body>
-    </Card>
-  ))
 }
 
 export default Search
