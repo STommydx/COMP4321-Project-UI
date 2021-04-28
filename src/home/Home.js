@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import SearchBar from '../search/SearchBar'
+import Tips from './Tips'
 
 function Home() {
   return (
@@ -18,12 +19,17 @@ function Home() {
         </Col>
         <Col />
       </Row>
-      <Row className="my-2">
+      <Row className="my-4">
         <Col />
         <Col lg={8}>
           <SearchBar defaultQuery="" />
         </Col>
         <Col />
+      </Row>
+      <Row>
+        <Col>
+          <Tips />
+        </Col>
       </Row>
     </Container>
   )
