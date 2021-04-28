@@ -133,7 +133,7 @@ function LinksList({ links }) {
 }
 
 function KeywordList({ freqTable }) {
-  const [limit, setLimit] = useState(10)
+  const [limit, setLimit] = useState(5)
   const sortedTable = _.sortBy(
     _.map(freqTable, (val, key) => ({ key: key, value: val })),
     (x) => -x.value
