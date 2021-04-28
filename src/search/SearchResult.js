@@ -126,7 +126,7 @@ function LinksList({ links }) {
           <div
             className="font-italic text-secondary"
             css={{ cursor: 'pointer' }}>
-            [Show more...]
+            [Show more... ({links.length - limit}+)]
           </div>
         </li>
       )}
