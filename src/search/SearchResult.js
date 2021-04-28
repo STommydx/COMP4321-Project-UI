@@ -87,6 +87,8 @@ function ResultCard({ similarity, documentRecord }) {
       </Card.Text>
       <Card.Text className="mb-0">Child Links:</Card.Text>
       <LinksList links={documentRecord.childLinks} />
+      <Card.Text className="mb-0">Parent Links:</Card.Text>
+      <LinksList links={documentRecord.parentLinks} />
     </Card.Body>
   )
 }
